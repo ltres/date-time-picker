@@ -61,6 +61,23 @@
             </span>
         </div>
     </div>
+    <div class="owl-dt-container-info  owl-dt-container-row">
+        <span class="owl-dt-container-recurrence">
+            <span class="owl-dt-container-info-label">
+                {{recurrenceLabel}}:
+            </span>
+            <span class="owl-dt-container-recurrence-values" role="radiogroup">
+                <label class="recurrence-option">
+                    <input type="radio" (change)="onSelectRecurrence(undefined)" name="selectedRecurrence" [value]="undefined" [checked]="!selectedRecurrence">
+                    {{getRecurrenceLabel('no')}}
+                </label>
+                <label *ngFor="let recurrenceValue of recurrenceValues" class="recurrence-option">
+                    <input type="radio" (change)="onSelectRecurrence(recurrenceValue)" name="selectedRecurrence" [value]="recurrenceValue" [checked]="recurrenceValue === selectedRecurrence">
+                    {{getRecurrenceLabel(recurrenceValue)}}
+                </label>
+            </span>
+        </span>
+    </div>
 
     <div *ngIf="showControlButtons" class="owl-dt-container-buttons owl-dt-container-row">
         <button class="owl-dt-control owl-dt-control-button owl-dt-container-control-button"

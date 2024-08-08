@@ -28,6 +28,7 @@ import {
     SPACE,
     UP_ARROW
 } from '@angular/cdk/keycodes';
+import { Recurrence, RECURRENCE_VALUES } from '../utils/constants';
 
 @Component({
     exportAs: 'owlDateTimeContainer',
@@ -84,6 +85,15 @@ export class OwlDateTimeContainerComponent<T>
         return this.confirmSelected$.asObservable();
     }
 
+    /**
+     * Stream emits when try to confirm the selected value
+     * */
+    private cancel$ = new Subject<any>();
+
+    get cancelStream(): Observable<any> {
+        return this.cancel$.asObservable();
+    }
+
     private beforePickerOpened$ = new Subject<any>();
 
     get beforePickerOpenedStream(): Observable<any> {
@@ -101,6 +111,10 @@ export class OwlDateTimeContainerComponent<T>
      * highlighted when using keyboard navigation.
      */
     private _clamPickerMoment: T;
+
+    protected recurrenceValues = RECURRENCE_VALUES
+
+    selectedRecurrence: Recurrence | undefined
 
     get pickerMoment() {
         return this._clamPickerMoment;
@@ -141,6 +155,17 @@ export class OwlDateTimeContainerComponent<T>
      * */
     get toLabel(): string {
         return this.pickerIntl.rangeToLabel;
+    }
+
+    /**
+     * The range 'recurrence' label
+     * */
+    get recurrenceLabel(): string {
+        return this.pickerIntl.recurrenceLabel;
+    }
+
+    getRecurrenceLabel( recurrence: string ){
+        return this.pickerIntl[recurrence];
     }
 
     /**
@@ -221,6 +246,9 @@ export class OwlDateTimeContainerComponent<T>
             }
             if (this.picker.selecteds[1]) {
                 this.retainEndTime = this.dateTimeAdapter.clone(this.picker.selecteds[1]);
+            }
+            if(typeof this.picker.recurrence !== 'undefined'){
+                this.selectedRecurrence = this.picker.recurrence
             }
         }
     }
@@ -323,8 +351,10 @@ export class OwlDateTimeContainerComponent<T>
      * Handle click on cancel button
      */
     public onCancelClicked(event: any): void {
-        this.hidePicker$.next(null);
+        this.cancel$.next(event);
         event.preventDefault();
+        this.hidePicker$.next(null);
+
         return;
     }
 
@@ -550,5 +580,10 @@ export class OwlDateTimeContainerComponent<T>
         } else if (this.timer) {
             this.timer.focus();
         }
+    }
+
+    protected onSelectRecurrence( recurrence: Recurrence | undefined ){
+        this.selectedRecurrence = recurrence
+        this.picker.recurrence = this.selectedRecurrence
     }
 }

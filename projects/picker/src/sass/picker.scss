@@ -647,6 +647,33 @@ $theme-color: #3f51b5;
     }
   }
 
+  .owl-dt-container-recurrence {
+    outline: none;
+    font-size: .8em;
+
+    display: -webkit-box;
+    display: flex;
+    flex-direction: column;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    padding: .5em 0;
+    font-size: .8em;
+    .owl-dt-container-recurrence-values{
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      padding: 0 .5em ;
+      gap: 0.5em;
+      justify-content: flex-end;
+      > *{
+        flex-basis: 0;
+        //flex-grow: 1;
+        flex-wrap: nowrap;
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+
   .owl-dt-container-info-active {
     color: $theme-color;
   }

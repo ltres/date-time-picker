@@ -252,6 +252,18 @@ export class OwlDateTimeInputDirective<T>
     @Output()
     dateTimeInput = new EventEmitter<any>();
 
+    /**
+     * Callback to invoke when `cancel` event is fired on this `<input>`
+     * */
+    @Output()
+    cancelClicked = new EventEmitter<any>();
+
+    /**
+     * Callback to invoke when a recurrence value has been confirmed
+     * */
+    @Output()
+    recurrenceChange = new EventEmitter<any>();
+
     get elementRef(): ElementRef {
         return this.elmRef;
     }
@@ -272,6 +284,9 @@ export class OwlDateTimeInputDirective<T>
     public dtPicker: OwlDateTimeComponent<T>;
 
     private dtPickerSub: Subscription = Subscription.EMPTY;
+    private dtPickerCancelSub: Subscription = Subscription.EMPTY;
+    private dtPickerRecurrenceSub: Subscription = Subscription.EMPTY;
+
     private localeSub: Subscription = Subscription.EMPTY;
 
     private lastValueValid = true;
@@ -513,10 +528,25 @@ export class OwlDateTimeInputDirective<T>
                 });
             }
         );
+        this.dtPickerCancelSub = this.dtPicker.cancelClicked.subscribe(
+            () => {
+                this.onModelTouched();
+                this.cancelClicked.emit();
+            }
+        );
+        this.dtPickerRecurrenceSub = this.dtPicker.confirmRecurrenceChange.subscribe(
+            (value: string) => {
+                this.onModelTouched();
+                this.recurrenceChange.emit(value);
+            }
+        );
+
     }
 
     public ngOnDestroy(): void {
         this.dtPickerSub.unsubscribe();
+        this.dtPickerCancelSub.unsubscribe();
+        this.dtPickerRecurrenceSub.unsubscribe();
         this.localeSub.unsubscribe();
         this.valueChange.complete();
         this.disabledChange.complete();

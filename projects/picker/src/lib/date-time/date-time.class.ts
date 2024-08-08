@@ -11,6 +11,7 @@ import {
     OWL_DATE_TIME_FORMATS,
     OwlDateTimeFormats
 } from './adapter/date-time-format.class';
+import { Recurrence } from '../utils/constants';
 
 let nextUniqueId = 0;
 
@@ -153,6 +154,10 @@ export abstract class OwlDateTime<T> {
     abstract get selected(): T | null;
 
     abstract get selecteds(): T[] | null;
+
+    abstract get recurrence(): Recurrence | undefined;
+
+    abstract set recurrence(value: Recurrence);
 
     abstract get dateTimeFilter(): (date: T | null) => boolean;
 

@@ -47,6 +47,7 @@ import { OwlDialogRef } from '../dialog/dialog-ref.class';
 import { OwlDialogService } from '../dialog/dialog.service';
 import { merge, Subscription } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
+import { Recurrence } from '../utils/constants';
 
 /** Injection token that determines the scroll handling while the dtPicker is open. */
 export const OWL_DTPICKER_SCROLL_STRATEGY = new InjectionToken<
@@ -263,6 +264,17 @@ export class OwlDateTimeComponent<T> extends OwlDateTime<T>
     public confirmSelectedChange = new EventEmitter<T[] | T>();
 
     /**
+     * Emit when the selected value has been confirmed
+     * */
+    public confirmRecurrenceChange = new EventEmitter<string | undefined>();
+
+    /**
+     * Emit when the cancel button has been clicked
+     * */
+    @Output()
+    public cancelClicked = new EventEmitter<void>();
+
+    /**
      * Emits when the date time picker is disabled.
      * */
     public disabledChange = new EventEmitter<boolean>();
@@ -276,6 +288,7 @@ export class OwlDateTimeComponent<T> extends OwlDateTime<T>
     private dtInputSub = Subscription.EMPTY;
     private hidePickerStreamSub = Subscription.EMPTY;
     private confirmSelectedStreamSub = Subscription.EMPTY;
+    private cancelStreamSub = Subscription.EMPTY;
     private pickerOpenedStreamSub = Subscription.EMPTY;
     private pickerBeforeOpenedStreamSub = Subscription.EMPTY;
 
@@ -331,6 +344,16 @@ export class OwlDateTimeComponent<T> extends OwlDateTime<T>
 
     get isInRangeMode(): boolean {
         return this._dtInput.isInRangeMode;
+    }
+
+    private _recurrence: Recurrence | undefined;
+    get recurrence() {
+        return this._recurrence;
+    }
+
+    set recurrence(value: Recurrence ) {
+        this._recurrence = value;
+        this.changeDetector.markForCheck();
     }
 
     private readonly defaultScrollStrategy: () => ScrollStrategy;
@@ -437,6 +460,13 @@ export class OwlDateTimeComponent<T> extends OwlDateTime<T>
                 this.confirmSelect(event);
             }
         );
+
+        // Listen to picker container's confirmSelectedStream
+        this.cancelStreamSub = this.pickerContainer.cancelStream.subscribe(
+            (event: any) => {
+                this.cancel(event);
+            }
+        );
     }
 
     /**
@@ -521,6 +551,11 @@ export class OwlDateTimeComponent<T> extends OwlDateTime<T>
             this.confirmSelectedStreamSub.unsubscribe();
             this.confirmSelectedStreamSub = null;
         }
+  
+        if (this.cancelStreamSub) {
+            this.cancelStreamSub.unsubscribe();
+            this.cancelStreamSub = null;
+        }
 
         if (this.pickerBeforeOpenedStreamSub) {
             this.pickerBeforeOpenedStreamSub.unsubscribe();
@@ -570,10 +605,21 @@ export class OwlDateTimeComponent<T> extends OwlDateTime<T>
             const selected =
                 this.selected || this.startAt || this.dateTimeAdapter.now();
             this.confirmSelectedChange.emit(selected);
+            this.confirmRecurrenceChange.emit(this._recurrence)
         } else if (this.isInRangeMode) {
             this.confirmSelectedChange.emit(this.selecteds);
+            this.confirmRecurrenceChange.emit(this._recurrence)
         }
 
+        this.close();
+        return;
+    }
+
+    /**
+     * Confirm the selected value
+     */
+    public cancel(event?: any): void {
+        this.cancelClicked.emit();
         this.close();
         return;
     }

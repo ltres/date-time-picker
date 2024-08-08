@@ -28,6 +28,7 @@ import {
     OwlDateTimeFormats
 } from './adapter/date-time-format.class';
 import { OwlDateTimeContainerComponent } from './date-time-picker-container.component';
+import { Recurrence } from '../utils/constants';
 
 export const OWL_DATETIME_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -280,6 +281,16 @@ export class OwlDateTimeInlineComponent<T> extends OwlDateTime<T>
             this._selectMode === 'rangeFrom' ||
             this._selectMode === 'rangeTo'
         );
+    }
+
+    private _recurrence: Recurrence | undefined;
+    get recurrence() {
+        return this._recurrence;
+    }
+
+    set recurrence(value: Recurrence ) {
+        this._recurrence = value;
+        this.changeDetector.markForCheck();
     }
 
     get owlDTInlineClass(): boolean {

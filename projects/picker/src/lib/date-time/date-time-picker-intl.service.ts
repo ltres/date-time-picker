@@ -68,6 +68,24 @@ export class OwlDateTimeIntl {
     /** A label for the range 'to' in picker info */
     rangeToLabel = 'To';
 
+    /** A label for the range 'recurrence' in picker info */
+    recurrenceLabel = 'Recurrence';
+
+    /** No recurrence */
+    no = 'No'
+
+    /** Daily recurrence */
+    daily = 'Daily'
+
+    /** Weekly recurrence */
+    weekly = 'Weekly'
+
+    /** Monthly recurrence */
+    monthly = 'Monthly'
+
+    /** Yearly recurrence */
+    yearly = 'Yearly'
+
     /** A label for the hour12 button (AM) */
     hour12AMLabel = 'AM';
 

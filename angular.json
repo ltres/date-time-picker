@@ -71,6 +71,19 @@
                   "maximumWarning": "6kb"
                 }
               ]
+            },
+            "development": {
+              "fileReplacements": [
+              ],
+              "optimization": false,
+              "outputHashing": "all",
+              "sourceMap": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "budgets": [
+
+              ]
             }
           }
         },
@@ -82,8 +95,12 @@
           "configurations": {
             "production": {
               "buildTarget": "date-time-picker-app:build:production"
+            },
+            "development": {
+              "buildTarget": "date-time-picker-app:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",

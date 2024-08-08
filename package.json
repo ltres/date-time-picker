@@ -1,6 +1,6 @@
 {
-  "name": "@danielmoncada/angular-datetime-picker",
-  "version": "18.0.0",
+  "name": "@ltres/angular-datetime-picker",
+  "version": "18.1.0",
   "description": "Angular Date Time Picker",
   "keywords": [
     "Angular",
@@ -29,11 +29,14 @@
     "build_css_onLinux": "mkdir -p dist/picker/assets/style && sass --style=compressed projects/picker/src/sass/picker.scss > dist/picker/assets/style/picker.min.css",
     "npm_pack": "cd dist/picker && npm pack",
     "package_windows": "npm run build_lib_onWindows && npm run build_css_onWindows && npm run npm_pack",
-    "package_linux": "npm run build_lib_onLinux && npm run build_css_onLinux && npm run npm_pack"
+    "package_linux": "npm run build_lib_onLinux && npm run build_css_onLinux && npm run npm_pack",
+    "publish": "cd dist/picker && npm publish --access public",
+    "link": "cd dist/picker && npm link"
+
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/danielmoncada/date-time-picker.git"
+    "url": "https://github.com/ltres/date-time-picker.git"
   },
   "dependencies": {
     "@angular/animations": "^18.0.1",
