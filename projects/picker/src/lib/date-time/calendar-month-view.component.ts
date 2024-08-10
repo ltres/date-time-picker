@@ -154,6 +154,8 @@ export class OwlMonthViewComponent<T>
             1
         );
 
+        
+
         if (
             !this.isSameMonth(oldMoment, this._pickerMoment) &&
             this.initiated

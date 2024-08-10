@@ -261,6 +261,7 @@ export class OwlDateTimeComponent<T> extends OwlDateTime<T>
     /**
      * Emit when the selected value has been confirmed
      * */
+    @Output()
     public confirmSelectedChange = new EventEmitter<T[] | T>();
 
     /**
@@ -358,7 +359,7 @@ export class OwlDateTimeComponent<T> extends OwlDateTime<T>
         return this._recurrence;
     }
 
-    set recurrence(value: Recurrence ) {
+    set recurrence(value: Recurrence | undefined ) {
         this._recurrence = value;
         this.changeDetector.markForCheck();
     }
@@ -611,13 +612,15 @@ export class OwlDateTimeComponent<T> extends OwlDateTime<T>
         if (this.isInSingleMode) {
             const selected =
                 this.selected || this.startAt || this.dateTimeAdapter.now();
+            this.confirmRecurrenceChange.emit(this._recurrence);
+            this.recurrenceChange.emit(this._recurrence);
             this.confirmSelectedChange.emit(selected);
-            this.confirmRecurrenceChange.emit(this._recurrence);
-            this.recurrenceChange.emit(this._recurrence);
+
         } else if (this.isInRangeMode) {
-            this.confirmSelectedChange.emit(this.selecteds);
             this.confirmRecurrenceChange.emit(this._recurrence);
             this.recurrenceChange.emit(this._recurrence);
+            this.confirmSelectedChange.emit(this.selecteds);
+
         }
 
         this.close();

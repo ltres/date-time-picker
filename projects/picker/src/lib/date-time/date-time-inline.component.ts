@@ -289,7 +289,7 @@ export class OwlDateTimeInlineComponent<T> extends OwlDateTime<T>
     get recurrence() {
         return this._recurrence;
     }
-    set recurrence(value: Recurrence ) {
+    set recurrence(value: Recurrence | undefined ) {
         this._recurrence = value;
         this.changeDetector.markForCheck();
     }

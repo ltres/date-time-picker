@@ -135,7 +135,7 @@ export class NativeDateTimeAdapter extends DateTimeAdapter<Date> {
             });
             return range(12, i =>
                 this.stripDirectionalityCharacters(
-                    this._format(dtf, new Date(2017, i, 1))
+                    this._format(dtf, new Date(Date.UTC(2017, i, 1,0,0,0)))
                 )
             );
         }
@@ -150,7 +150,7 @@ export class NativeDateTimeAdapter extends DateTimeAdapter<Date> {
             });
             return range(7, i =>
                 this.stripDirectionalityCharacters(
-                    this._format(dtf, new Date(2017, 0, i + 1))
+                    this._format(dtf, new Date(Date.UTC(2017, 0, i + 1,0,0,0)) )
                 )
             );
         }
@@ -355,18 +355,7 @@ export class NativeDateTimeAdapter extends DateTimeAdapter<Date> {
      * representation with the local date and time.
      */
     private _format(dtf: Intl.DateTimeFormat, date: Date) {
-        /*
-        const d = new Date(
-            Date.UTC(
-                date.getUTCFullYear(),
-                date.getUTCMonth(),
-                date.getUTCDate(),
-                date.getUTCHours(),
-                date.getUTCMinutes(),
-                date.getUTCSeconds(),
-                date.getUTCMilliseconds()
-            )
-        );*/
+        
         return dtf.format(date);
     }
 }
