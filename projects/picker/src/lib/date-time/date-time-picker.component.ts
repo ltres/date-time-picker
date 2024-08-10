@@ -266,13 +266,19 @@ export class OwlDateTimeComponent<T> extends OwlDateTime<T>
     /**
      * Emit when the selected value has been confirmed
      * */
-    public confirmRecurrenceChange = new EventEmitter<string | undefined>();
+    public confirmRecurrenceChange = new EventEmitter<Recurrence | undefined>();
 
     /**
      * Emit when the cancel button has been clicked
      * */
     @Output()
     public cancelClicked = new EventEmitter<void>();
+
+    /**
+     * Callback to invoke when a recurrence value has been confirmed
+     * */
+    @Output()
+    public recurrenceChange = new EventEmitter<Recurrence | undefined>();
 
     /**
      * Emits when the date time picker is disabled.
@@ -347,6 +353,7 @@ export class OwlDateTimeComponent<T> extends OwlDateTime<T>
     }
 
     private _recurrence: Recurrence | undefined;
+    @Input()
     get recurrence() {
         return this._recurrence;
     }
@@ -605,10 +612,12 @@ export class OwlDateTimeComponent<T> extends OwlDateTime<T>
             const selected =
                 this.selected || this.startAt || this.dateTimeAdapter.now();
             this.confirmSelectedChange.emit(selected);
-            this.confirmRecurrenceChange.emit(this._recurrence)
+            this.confirmRecurrenceChange.emit(this._recurrence);
+            this.recurrenceChange.emit(this._recurrence);
         } else if (this.isInRangeMode) {
             this.confirmSelectedChange.emit(this.selecteds);
-            this.confirmRecurrenceChange.emit(this._recurrence)
+            this.confirmRecurrenceChange.emit(this._recurrence);
+            this.recurrenceChange.emit(this._recurrence);
         }
 
         this.close();

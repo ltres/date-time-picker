@@ -297,8 +297,10 @@ export class NativeDateTimeAdapter extends DateTimeAdapter<Date> {
                     Math.max(1, Math.min(9999, date.getFullYear()))
                 );
             }
-
-            displayFormat = { ...displayFormat, timeZone: 'utc' };
+            if(!displayFormat.timeZone){
+                displayFormat.timeZone = 'utc'
+            }
+            //displayFormat = { ...displayFormat, timeZone: 'Europe/Rome' };
             const dtf = new Intl.DateTimeFormat(this.getLocale(), displayFormat);
             return this.stripDirectionalityCharacters(this._format(dtf, date));
         }
@@ -353,17 +355,18 @@ export class NativeDateTimeAdapter extends DateTimeAdapter<Date> {
      * representation with the local date and time.
      */
     private _format(dtf: Intl.DateTimeFormat, date: Date) {
+        /*
         const d = new Date(
             Date.UTC(
-                date.getFullYear(),
-                date.getMonth(),
-                date.getDate(),
-                date.getHours(),
-                date.getMinutes(),
-                date.getSeconds(),
-                date.getMilliseconds()
+                date.getUTCFullYear(),
+                date.getUTCMonth(),
+                date.getUTCDate(),
+                date.getUTCHours(),
+                date.getUTCMinutes(),
+                date.getUTCSeconds(),
+                date.getUTCMilliseconds()
             )
-        );
-        return dtf.format(d);
+        );*/
+        return dtf.format(date);
     }
 }

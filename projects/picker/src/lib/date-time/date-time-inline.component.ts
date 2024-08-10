@@ -283,11 +283,12 @@ export class OwlDateTimeInlineComponent<T> extends OwlDateTime<T>
         );
     }
 
+    /** The set recurrence */
     private _recurrence: Recurrence | undefined;
+    @Input()
     get recurrence() {
         return this._recurrence;
     }
-
     set recurrence(value: Recurrence ) {
         this._recurrence = value;
         this.changeDetector.markForCheck();

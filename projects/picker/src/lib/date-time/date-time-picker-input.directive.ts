@@ -36,6 +36,7 @@ import {
 import { Subscription } from 'rxjs';
 import { SelectMode } from './date-time.class';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import { Recurrence } from '../utils/constants';
 
 export const OWL_DATETIME_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -535,7 +536,7 @@ export class OwlDateTimeInputDirective<T>
             }
         );
         this.dtPickerRecurrenceSub = this.dtPicker.confirmRecurrenceChange.subscribe(
-            (value: string) => {
+            (value: Recurrence) => {
                 this.onModelTouched();
                 this.recurrenceChange.emit(value);
             }

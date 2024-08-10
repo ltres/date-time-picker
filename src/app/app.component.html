@@ -32,7 +32,8 @@
         [startAt]="currentValue"
         [endAt]="endValue"
         (afterPickerClosed)="selectedTrigger($event)"
-        (dateSelected)="selectedTrigger($event)">
+        (dateSelected)="selectedTrigger($event)"
+        [recurrence]="'daily'">
       </owl-date-time>
     }
 
