@@ -1,7 +1,11 @@
+
 <div [cdkTrapFocus]="picker.pickerMode !== 'inline'"
      [@fadeInPicker]="picker.pickerMode === 'inline'? '' : 'enter'"
      class="owl-dt-container-inner">
 
+    <ng-container *ngTemplateOutlet="headerSlot"></ng-container>
+    <ng-container *ngTemplateOutlet="headerSlotInput"></ng-container>
+    
     <owl-date-time-calendar
             *ngIf="pickerType === 'both' || pickerType === 'calendar'"
             class="owl-dt-container-row"
@@ -78,6 +82,9 @@
             </span>
         </span>
     </div>
+
+    <ng-container *ngTemplateOutlet="footerSlot"></ng-container>
+    <ng-container *ngTemplateOutlet="footerSlotInput"></ng-container>
 
     <div *ngIf="showControlButtons" class="owl-dt-container-buttons owl-dt-container-row">
         <button class="owl-dt-control owl-dt-control-button owl-dt-container-control-button"

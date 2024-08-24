@@ -5,13 +5,14 @@
 import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
-    Component, EventEmitter,
+    Component, ContentChild, ElementRef, EventEmitter,
     forwardRef,
     Inject,
     Input,
     OnInit,
     Optional,
     Output,
+    TemplateRef,
     ViewChild
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -51,6 +52,10 @@ export class OwlDateTimeInlineComponent<T> extends OwlDateTime<T>
     implements OnInit, ControlValueAccessor {
     @ViewChild(OwlDateTimeContainerComponent, { static: true })
     container: OwlDateTimeContainerComponent<T>;
+
+    /* Slots */
+    @ContentChild('header') headerSlot: TemplateRef<unknown> | undefined;
+    @ContentChild('footer') footerSlot: TemplateRef<unknown> | undefined;
 
     /**
      * Set the type of the dateTime picker

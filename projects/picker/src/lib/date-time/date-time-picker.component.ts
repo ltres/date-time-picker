@@ -7,6 +7,8 @@ import {
     ChangeDetectorRef,
     Component,
     ComponentRef,
+    ContentChild,
+    ElementRef,
     EventEmitter,
     Inject,
     InjectionToken,
@@ -16,6 +18,7 @@ import {
     OnInit,
     Optional,
     Output,
+    TemplateRef,
     ViewContainerRef
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
@@ -79,6 +82,11 @@ export const OWL_DTPICKER_SCROLL_STRATEGY_PROVIDER = {
 })
 export class OwlDateTimeComponent<T> extends OwlDateTime<T>
     implements OnInit, OnDestroy {
+
+    /* Slots */
+    @ContentChild('header') headerSlot: TemplateRef<unknown> | undefined;
+    @ContentChild('footer') footerSlot: TemplateRef<unknown> | undefined;
+    
     /** Custom class for the picker backdrop. */
     @Input()
     public backdropClass: string | string[] = [];
@@ -685,6 +693,8 @@ export class OwlDateTimeComponent<T> extends OwlDateTime<T>
                 OwlDateTimeContainerComponent<T>
             > = this.popupRef.attach(this.pickerContainerPortal);
             this.pickerContainer = componentRef.instance;
+            this.pickerContainer.footerSlotInput = this.footerSlot;
+            this.pickerContainer.headerSlotInput = this.headerSlot;
 
             // Update the position once the calendar has rendered.
             this.ngZone.onStable

@@ -1,1 +1,8 @@
-<owl-date-time-container></owl-date-time-container>
+
+<owl-date-time-container>
+    <ng-template #header><ng-container *ngTemplateOutlet="headerSlot"></ng-container>
+    </ng-template>
+
+    <ng-template #footer><ng-container *ngTemplateOutlet="footerSlot"></ng-container>
+    </ng-template>
+</owl-date-time-container>

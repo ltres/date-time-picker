@@ -34,6 +34,8 @@
         (afterPickerClosed)="selectedTrigger($event)"
         (dateSelected)="selectedTrigger($event)"
         [recurrence]="'daily'">
+        <ng-template #header>test</ng-template>
+        <ng-template #footer>test2</ng-template>
       </owl-date-time>
     }
 
@@ -44,6 +46,8 @@
         [endAt]="endValue"
         selectMode="range"
         pickerType="both">
+        <ng-template #header>test</ng-template>
+        <ng-template #footer>test2</ng-template>
       </owl-date-time-inline>
     }
   }

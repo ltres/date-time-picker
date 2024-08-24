@@ -8,9 +8,12 @@ import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
     Component,
+    ContentChild,
     ElementRef,
+    Input,
     OnInit,
     Optional,
+    TemplateRef,
     ViewChild
 } from '@angular/core';
 import { AnimationEvent } from '@angular/animations';
@@ -59,6 +62,12 @@ export class OwlDateTimeContainerComponent<T>
     calendar: OwlCalendarComponent<T>;
     @ViewChild(OwlTimerComponent)
     timer: OwlTimerComponent<T>;
+    /* Slots */
+    @ContentChild('header') headerSlot: TemplateRef<unknown> | undefined;
+    @ContentChild('footer') footerSlot: TemplateRef<unknown> | undefined;
+    /* inputs */
+    @Input() headerSlotInput: TemplateRef<unknown> | undefined;
+    @Input() footerSlotInput: TemplateRef<unknown> | undefined;
 
     public picker: OwlDateTime<T>;
     public activeSelectedIndex = 0; // The current active SelectedIndex in range select mode (0: 'from', 1: 'to')
