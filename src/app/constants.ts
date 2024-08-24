@@ -26,5 +26,15 @@ export const datePickerFormat: {
     "monthly",
     "yearly",
 ]
+  
+export const TIMEFRAME_VALUES: Timeframes[] = [
+  "6 hours",
+   "24 hours",
+   "week",
+   "month"
+]
+
 
 export type Recurrence =  "daily" |"weekly"|"monthly"|"yearly";
+
+export type Timeframes = "6 hours" | "24 hours" | "week" | "month";

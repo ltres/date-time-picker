@@ -34,7 +34,9 @@
         (afterPickerClosed)="selectedTrigger($event)"
         (dateSelected)="selectedTrigger($event)"
         [recurrence]="'daily'">
-        <ng-template #header>test</ng-template>
+        <ng-template #header>
+          <ng-container *ngTemplateOutlet="timeframe"></ng-container>
+        </ng-template>
         <ng-template #footer>
           <ng-container *ngTemplateOutlet="recurrence"></ng-container>
         </ng-template>
@@ -48,7 +50,9 @@
         [endAt]="endValue"
         selectMode="range"
         pickerType="both">
-        <ng-template #header>test</ng-template>
+        <ng-template #header>
+          <ng-container *ngTemplateOutlet="timeframe"></ng-container>
+        </ng-template>
         <ng-template #footer>
           <ng-container *ngTemplateOutlet="recurrence"></ng-container>
         </ng-template>
@@ -74,5 +78,24 @@
             </label>
         </span>
     </span>
+  </div>
+</ng-template>
+
+<ng-template #timeframe>
+  <div class="owl-dt-container-info  owl-dt-container-row">
+    <span class="owl-dt-container-recurrence">
+        <span class="owl-dt-container-info-label">
+            Timeframe
+        </span>
+        <span class="owl-dt-container-recurrence-values" role="radiogroup">
+            <label *ngFor="let timeframeValue of timeframeValues" class="recurrence-option">
+                <input type="radio" name="selectedRecurrence">
+                {{getTimeframeLabel(timeframeValue)}}
+            </label>
+        </span>
+    </span>
+  </div>
+  <div class="owl-dt-container-info  owl-dt-container-row">
+    or
   </div>
 </ng-template>
