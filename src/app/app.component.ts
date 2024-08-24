@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { datePickerFormat, RECURRENCE_VALUES, TIMEFRAME_VALUES } from './constants';
+import { datePickerFormat, RECURRENCE_VALUES, Timeframe, TIMEFRAME_VALUES } from './constants';
 
 import { DateTimeAdapter, OWL_DATE_TIME_FORMATS, OwlDateTimeModule, OwlNativeDateTimeModule } from '../../projects/picker/src/public_api';
 import { CommonModule } from '@angular/common';
@@ -29,6 +29,8 @@ export class AppComponent {
   protected recurrenceValues = RECURRENCE_VALUES
   protected timeframeValues= TIMEFRAME_VALUES
 
+  protected selectedTimeframe: Timeframe | undefined
+
   constructor(dateTimeAdapter: DateTimeAdapter<unknown>){
     dateTimeAdapter.setLocale("it-IT");
   }
@@ -38,11 +40,17 @@ export class AppComponent {
     new Date(Date.now() + ONE_DAY)
   ];
 
+  protected selectedDatesU: [null, null] = [
+    null,
+    null
+  ];
+
   protected currentValue: Date = new Date(this.selectedDates[0]);
 
   protected endValue: Date = new Date(this.selectedDates[1]);
 
   protected selectedTrigger(date: Date): void {
+    this.selectedTimeframe = undefined;
     console.log(date);
   }
   getRecurrenceLabel( recurrence: string ){

@@ -57,12 +57,3 @@ export const DEFAULT_DAY_OF_WEEK_NAMES = {
 
 /** The default date names to use if Intl API is not available. */
 export const DEFAULT_DATE_NAMES = range(31, i => String(i + 1));
-
-export type Recurrence =  "daily" |"weekly"|"monthly"|"yearly";
-
-export const RECURRENCE_VALUES: Recurrence[] = [
-    "daily",
-    "weekly",
-    "monthly",
-    "yearly",
-]

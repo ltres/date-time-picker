@@ -50,7 +50,6 @@ import { OwlDialogRef } from '../dialog/dialog-ref.class';
 import { OwlDialogService } from '../dialog/dialog.service';
 import { merge, Subscription } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
-import { Recurrence } from '../utils/constants';
 
 /** Injection token that determines the scroll handling while the dtPicker is open. */
 export const OWL_DTPICKER_SCROLL_STRATEGY = new InjectionToken<
@@ -87,6 +86,8 @@ export class OwlDateTimeComponent<T> extends OwlDateTime<T>
     @ContentChild('header') headerSlot: TemplateRef<unknown> | undefined;
     @ContentChild('footer') footerSlot: TemplateRef<unknown> | undefined;
     
+    @Input() hideCalendar: boolean = false;
+
     /** Custom class for the picker backdrop. */
     @Input()
     public backdropClass: string | string[] = [];
@@ -273,21 +274,10 @@ export class OwlDateTimeComponent<T> extends OwlDateTime<T>
     public confirmSelectedChange = new EventEmitter<T[] | T>();
 
     /**
-     * Emit when the selected value has been confirmed
-     * */
-    public confirmRecurrenceChange = new EventEmitter<Recurrence | undefined>();
-
-    /**
      * Emit when the cancel button has been clicked
      * */
     @Output()
     public cancelClicked = new EventEmitter<void>();
-
-    /**
-     * Callback to invoke when a recurrence value has been confirmed
-     * */
-    @Output()
-    public recurrenceChange = new EventEmitter<Recurrence | undefined>();
 
     /**
      * Emits when the date time picker is disabled.
@@ -330,7 +320,7 @@ export class OwlDateTimeComponent<T> extends OwlDateTime<T>
         return this._selecteds;
     }
 
-    set selecteds(values: T[]) {
+    set selecteds(values: T[] | undefined) {
         this._selecteds = values;
         this.changeDetector.markForCheck();
     }
@@ -359,17 +349,6 @@ export class OwlDateTimeComponent<T> extends OwlDateTime<T>
 
     get isInRangeMode(): boolean {
         return this._dtInput.isInRangeMode;
-    }
-
-    private _recurrence: Recurrence | undefined;
-    @Input()
-    get recurrence() {
-        return this._recurrence;
-    }
-
-    set recurrence(value: Recurrence | undefined ) {
-        this._recurrence = value;
-        this.changeDetector.markForCheck();
     }
 
     private readonly defaultScrollStrategy: () => ScrollStrategy;
@@ -488,7 +467,7 @@ export class OwlDateTimeComponent<T> extends OwlDateTime<T>
     /**
      * Selects the given date
      */
-    public select(date: T[] | T): void {
+    public select(date: T[] | T | null): void {
         if (Array.isArray(date)) {
             this.selecteds = [...date];
         } else {
@@ -620,15 +599,10 @@ export class OwlDateTimeComponent<T> extends OwlDateTime<T>
         if (this.isInSingleMode) {
             const selected =
                 this.selected || this.startAt || this.dateTimeAdapter.now();
-            this.confirmRecurrenceChange.emit(this._recurrence);
-            this.recurrenceChange.emit(this._recurrence);
             this.confirmSelectedChange.emit(selected);
 
         } else if (this.isInRangeMode) {
-            this.confirmRecurrenceChange.emit(this._recurrence);
-            this.recurrenceChange.emit(this._recurrence);
             this.confirmSelectedChange.emit(this.selecteds);
-
         }
 
         this.close();
@@ -663,6 +637,9 @@ export class OwlDateTimeComponent<T> extends OwlDateTime<T>
             }
         );
         this.pickerContainer = this.dialogRef.componentInstance;
+        this.pickerContainer.footerSlotInput = this.footerSlot;
+        this.pickerContainer.headerSlotInput = this.headerSlot;
+        this.pickerContainer.hideCalendar = this.hideCalendar;
 
         this.dialogRef.beforeOpen().subscribe(() => {
             this.beforePickerOpen.emit(null);
@@ -695,6 +672,7 @@ export class OwlDateTimeComponent<T> extends OwlDateTime<T>
             this.pickerContainer = componentRef.instance;
             this.pickerContainer.footerSlotInput = this.footerSlot;
             this.pickerContainer.headerSlotInput = this.headerSlot;
+            this.pickerContainer.hideCalendar = this.hideCalendar;
 
             // Update the position once the calendar has rendered.
             this.ngZone.onStable

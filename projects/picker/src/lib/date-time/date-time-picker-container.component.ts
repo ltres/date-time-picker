@@ -9,12 +9,16 @@ import {
     ChangeDetectorRef,
     Component,
     ContentChild,
+    ContentChildren,
     ElementRef,
     Input,
+    OnDestroy,
     OnInit,
     Optional,
+    QueryList,
     TemplateRef,
-    ViewChild
+    ViewChild,
+    ViewChildren
 } from '@angular/core';
 import { AnimationEvent } from '@angular/animations';
 import { OwlDateTimeIntl } from './date-time-picker-intl.service';
@@ -22,7 +26,7 @@ import { OwlCalendarComponent } from './calendar.component';
 import { OwlTimerComponent } from './timer.component';
 import { DateTimeAdapter } from './adapter/date-time-adapter.class';
 import { OwlDateTime, PickerType } from './date-time.class';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { owlDateTimePickerAnimations } from './date-time-picker.animations';
 import {
     DOWN_ARROW,
@@ -31,7 +35,8 @@ import {
     SPACE,
     UP_ARROW
 } from '@angular/cdk/keycodes';
-import { Recurrence, RECURRENCE_VALUES } from '../utils/constants';
+import { UnselectorDirective } from './unselector.directive';
+import { UnselectorService } from './unselector.service';
 
 @Component({
     exportAs: 'owlDateTimeContainer',
@@ -57,7 +62,7 @@ import { Recurrence, RECURRENCE_VALUES } from '../utils/constants';
     }
 })
 export class OwlDateTimeContainerComponent<T>
-    implements OnInit, AfterContentInit, AfterViewInit {
+    implements OnInit, AfterContentInit, AfterViewInit, OnDestroy {
     @ViewChild(OwlCalendarComponent)
     calendar: OwlCalendarComponent<T>;
     @ViewChild(OwlTimerComponent)
@@ -68,6 +73,10 @@ export class OwlDateTimeContainerComponent<T>
     /* inputs */
     @Input() headerSlotInput: TemplateRef<unknown> | undefined;
     @Input() footerSlotInput: TemplateRef<unknown> | undefined;
+    
+
+    @Input() hideCalendar: boolean = false;
+
 
     public picker: OwlDateTime<T>;
     public activeSelectedIndex = 0; // The current active SelectedIndex in range select mode (0: 'from', 1: 'to')
@@ -120,10 +129,6 @@ export class OwlDateTimeContainerComponent<T>
      * highlighted when using keyboard navigation.
      */
     private _clamPickerMoment: T;
-
-    protected recurrenceValues = RECURRENCE_VALUES
-
-    selectedRecurrence: Recurrence | undefined
 
     get pickerMoment() {
         return this._clamPickerMoment;
@@ -242,11 +247,16 @@ export class OwlDateTimeContainerComponent<T>
         return this.picker.pickerMode === 'inline' ? '' : 'enter';
     }
 
+    unselectorSubscription: Subscription | undefined
+
     constructor( private cdRef: ChangeDetectorRef,
                   private elmRef: ElementRef,
                   private pickerIntl: OwlDateTimeIntl,
+                  private unselectorService: UnselectorService,
                  @Optional() private dateTimeAdapter: DateTimeAdapter<T> ) {
+                    
     }
+
 
     public ngOnInit() {
         if (this.picker.selectMode === 'range') {
@@ -255,9 +265,6 @@ export class OwlDateTimeContainerComponent<T>
             }
             if (this.picker.selecteds[1]) {
                 this.retainEndTime = this.dateTimeAdapter.clone(this.picker.selecteds[1]);
-            }
-            if(typeof this.picker.recurrence !== 'undefined'){
-                this.selectedRecurrence = this.picker.recurrence
             }
         }
     }
@@ -268,6 +275,21 @@ export class OwlDateTimeContainerComponent<T>
 
     public ngAfterViewInit(): void {
         this.focusPicker();
+        this.unselectorSubscription = this.unselectorService.getUnselect$().subscribe( unselect => {
+            if(unselect){
+                this.picker.selected = null;
+                this.picker.selecteds = [null,null];
+
+                this.dateSelected(null)
+                this.timeSelected(null)
+            }
+        })
+    }
+
+    ngOnDestroy(): void {
+        if(this.unselectorSubscription){
+            this.unselectorSubscription.unsubscribe()
+        }
     }
 
     public handleContainerAnimationStart(event: AnimationEvent): void {
@@ -283,7 +305,7 @@ export class OwlDateTimeContainerComponent<T>
         }
     }
 
-    public dateSelected(date: T): void {
+    public dateSelected(date: T | null): void {
         let result;
 
         if (this.picker.isInSingleMode) {
@@ -305,11 +327,14 @@ export class OwlDateTimeContainerComponent<T>
             if (result) {
                 this.pickerMoment = result[this.activeSelectedIndex];
                 this.picker.select(result);
+            }else{
+                this.pickerMoment = null;
+                this.picker.select(null);
             }
         }
     }
 
-    public timeSelected(time: T): void {
+    public timeSelected(time: T | null): void {
         this.pickerMoment = this.dateTimeAdapter.clone(time);
 
         if (!this.picker.dateTimeChecker(this.pickerMoment)) {
@@ -459,7 +484,8 @@ export class OwlDateTimeContainerComponent<T>
     /**
      * Select dates in range Mode
      */
-    private dateSelectedInRangeMode(date: T): T[] | null {
+    private dateSelectedInRangeMode(date: T | null): T[] | null {
+        if(!date) return null;
         let from = this.picker.selecteds[0];
         let to = this.picker.selecteds[1];
 
@@ -589,10 +615,5 @@ export class OwlDateTimeContainerComponent<T>
         } else if (this.timer) {
             this.timer.focus();
         }
-    }
-
-    protected onSelectRecurrence( recurrence: Recurrence | undefined ){
-        this.selectedRecurrence = recurrence
-        this.picker.recurrence = this.selectedRecurrence
     }
 }
