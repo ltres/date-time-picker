@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { datePickerFormat } from './constants';
+import { datePickerFormat, RECURRENCE_VALUES } from './constants';
 
 import { DateTimeAdapter, OWL_DATE_TIME_FORMATS, OwlDateTimeModule, OwlNativeDateTimeModule } from '../../projects/picker/src/public_api';
+import { CommonModule } from '@angular/common';
 
 /** One day in milliseconds */
 const ONE_DAY = 24 * 60 * 60 * 1000;
@@ -16,7 +17,8 @@ const ONE_DAY = 24 * 60 * 60 * 1000;
   imports: [
     FormsModule,
     OwlDateTimeModule,
-    OwlNativeDateTimeModule
+    OwlNativeDateTimeModule,
+    CommonModule
   ],
   providers: [
     {provide: OWL_DATE_TIME_FORMATS, useValue: datePickerFormat},
@@ -24,8 +26,7 @@ const ONE_DAY = 24 * 60 * 60 * 1000;
 })
 export class AppComponent {
   protected readonly currentTab = signal<string>('date-range');
-
-
+  protected recurrenceValues = RECURRENCE_VALUES
 
   constructor(dateTimeAdapter: DateTimeAdapter<unknown>){
     dateTimeAdapter.setLocale("it-IT");
@@ -43,5 +44,8 @@ export class AppComponent {
   protected selectedTrigger(date: Date): void {
     console.log(date);
   }
+  getRecurrenceLabel( recurrence: string ){
+    return recurrence;
+}
   
 }

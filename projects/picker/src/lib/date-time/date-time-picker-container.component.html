@@ -3,8 +3,11 @@
      [@fadeInPicker]="picker.pickerMode === 'inline'? '' : 'enter'"
      class="owl-dt-container-inner">
 
-    <ng-container *ngTemplateOutlet="headerSlot"></ng-container>
-    <ng-container *ngTemplateOutlet="headerSlotInput"></ng-container>
+     @if(headerSlot){
+        <ng-container *ngTemplateOutlet="headerSlot"></ng-container>
+    }@else if(headerSlotInput){
+        <ng-container *ngTemplateOutlet="headerSlotInput"></ng-container>
+    }
     
     <owl-date-time-calendar
             *ngIf="pickerType === 'both' || pickerType === 'calendar'"
@@ -65,26 +68,12 @@
             </span>
         </div>
     </div>
-    <div class="owl-dt-container-info  owl-dt-container-row">
-        <span class="owl-dt-container-recurrence">
-            <span class="owl-dt-container-info-label">
-                {{recurrenceLabel}}:
-            </span>
-            <span class="owl-dt-container-recurrence-values" role="radiogroup">
-                <label class="recurrence-option">
-                    <input type="radio" (change)="onSelectRecurrence(undefined)" name="selectedRecurrence" [value]="undefined" [checked]="!selectedRecurrence">
-                    {{getRecurrenceLabel('no')}}
-                </label>
-                <label *ngFor="let recurrenceValue of recurrenceValues" class="recurrence-option">
-                    <input type="radio" (change)="onSelectRecurrence(recurrenceValue)" name="selectedRecurrence" [value]="recurrenceValue" [checked]="recurrenceValue === selectedRecurrence">
-                    {{getRecurrenceLabel(recurrenceValue)}}
-                </label>
-            </span>
-        </span>
-    </div>
 
-    <ng-container *ngTemplateOutlet="footerSlot"></ng-container>
-    <ng-container *ngTemplateOutlet="footerSlotInput"></ng-container>
+    @if(footerSlot){
+        <ng-container *ngTemplateOutlet="footerSlot"></ng-container>
+    }@else if(footerSlotInput){
+        <ng-container *ngTemplateOutlet="footerSlotInput"></ng-container>
+    }
 
     <div *ngIf="showControlButtons" class="owl-dt-container-buttons owl-dt-container-row">
         <button class="owl-dt-control owl-dt-control-button owl-dt-container-control-button"

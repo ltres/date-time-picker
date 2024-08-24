@@ -35,7 +35,9 @@
         (dateSelected)="selectedTrigger($event)"
         [recurrence]="'daily'">
         <ng-template #header>test</ng-template>
-        <ng-template #footer>test2</ng-template>
+        <ng-template #footer>
+          <ng-container *ngTemplateOutlet="recurrence"></ng-container>
+        </ng-template>
       </owl-date-time>
     }
 
@@ -47,8 +49,30 @@
         selectMode="range"
         pickerType="both">
         <ng-template #header>test</ng-template>
-        <ng-template #footer>test2</ng-template>
+        <ng-template #footer>
+          <ng-container *ngTemplateOutlet="recurrence"></ng-container>
+        </ng-template>
       </owl-date-time-inline>
     }
   }
 </main>
+
+<ng-template #recurrence>
+  <div class="owl-dt-container-info  owl-dt-container-row">
+    <span class="owl-dt-container-recurrence">
+        <span class="owl-dt-container-info-label">
+            Recurrence
+        </span>
+        <span class="owl-dt-container-recurrence-values" role="radiogroup">
+            <label class="recurrence-option">
+                <input type="radio" name="selectedRecurrence">
+                no
+            </label>
+            <label *ngFor="let recurrenceValue of recurrenceValues" class="recurrence-option">
+                <input type="radio" name="selectedRecurrence">
+                {{getRecurrenceLabel(recurrenceValue)}}
+            </label>
+        </span>
+    </span>
+  </div>
+</ng-template>

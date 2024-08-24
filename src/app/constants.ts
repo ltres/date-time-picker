@@ -20,4 +20,11 @@ export const datePickerFormat: {
     monthYearA11yLabel: {year: 'numeric', month: 'long', hour12: false},
   };
   
-  
+  export const RECURRENCE_VALUES: Recurrence[] = [
+    "daily",
+    "weekly",
+    "monthly",
+    "yearly",
+]
+
+export type Recurrence =  "daily" |"weekly"|"monthly"|"yearly";
