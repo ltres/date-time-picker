@@ -281,7 +281,7 @@ export class OwlDateTimeContainerComponent<T>
                 this.picker.selecteds = [null,null];
 
                 this.dateSelected(null)
-                this.timeSelected(null)
+                //this.timeSelected(null)
             }
         })
     }

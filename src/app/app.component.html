@@ -31,8 +31,10 @@
         #date_range_component
         [startAt]="currentValue"
         [endAt]="endValue"
-        (afterPickerClosed)="selectedTrigger($event)"
-        (dateSelected)="selectedTrigger($event)"
+        (afterPickerClosed)="null"
+        (dateSelected)="null"
+        (confirmSelectedChange)="selectedTrigger($event)"
+        (cancelClicked)="selectedTrigger($event)"
         [hideCalendar]="false"
         >
         <ng-template #header>

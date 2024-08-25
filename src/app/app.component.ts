@@ -49,7 +49,7 @@ export class AppComponent {
 
   protected endValue: Date = new Date(this.selectedDates[1]);
 
-  protected selectedTrigger(date: Date): void {
+  protected selectedTrigger(date: Date | Date[] | void): void {
     this.selectedTimeframe = undefined;
     console.log(date);
   }
