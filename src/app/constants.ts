@@ -1,3 +1,5 @@
+import { OwlDateTimeFormats } from "projects/picker/src/public_api";
+
 export const locale = {
     short:"it",
     long: "it-IT",
@@ -19,7 +21,22 @@ export const datePickerFormat: {
     dateA11yLabel: {year: 'numeric', month: 'long', day: 'numeric', hour12: false},
     monthYearA11yLabel: {year: 'numeric', month: 'long', hour12: false},
   };
+
+
+  export const datePickerFormatFuncz: OwlDateTimeFormats = {
+    parseInput: format,
+    fullPickerInput: format,
+    datePickerInput: format,
+    timePickerInput: format,
+    monthYearLabel: format,
+    dateA11yLabel: format,
+    monthYearA11yLabel: format,
+  };
   
+  function format(arg:Date): string{
+    return arg.toString()
+  }
+
   export const RECURRENCE_VALUES: Recurrence[] = [
     "daily",
     "weekly",

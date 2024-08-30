@@ -298,7 +298,11 @@ export class OwlMonthViewComponent<T>
         @Optional()
         @Inject(OWL_DATE_TIME_FORMATS)
         private dateTimeFormats: OwlDateTimeFormats
-    ) {}
+    ) {
+        if( dateTimeAdapter.dateTimeFormats ){
+            this.dateTimeFormats = dateTimeAdapter.dateTimeFormats
+        }
+    }
 
     public ngOnInit() {
         this.updateFirstDayOfWeek(this.dateTimeAdapter.getLocale());

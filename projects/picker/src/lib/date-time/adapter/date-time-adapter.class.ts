@@ -3,6 +3,7 @@
  */
 import { Observable, Subject } from 'rxjs';
 import { inject, InjectionToken, LOCALE_ID } from '@angular/core';
+import { OwlDateTimeFormats } from './date-time-format.class';
 
 /** InjectionToken for date time picker that can be used to override default locale code. */
 export const OWL_DATE_TIME_LOCALE = new InjectionToken<string>(
@@ -27,6 +28,9 @@ export const OWL_DATE_TIME_LOCALE_PROVIDER = {
 export abstract class DateTimeAdapter<T> {
     /** The locale to use for all dates. */
     protected locale: any;
+    
+    /* Formats or format functions injected at runtime */
+    public dateTimeFormats: OwlDateTimeFormats;
 
     /** A stream that emits when the locale changes. */
     protected _localeChanges = new Subject<string>();
@@ -293,6 +297,14 @@ export abstract class DateTimeAdapter<T> {
      * */
     getLocale() {
         return this.locale;
+    }
+
+    getDateTimeFormats(){
+        return this.dateTimeFormats
+    }
+
+    setDateTimeFormats( dateTimeFormats: any){
+        this.dateTimeFormats = dateTimeFormats;
     }
 
     /**

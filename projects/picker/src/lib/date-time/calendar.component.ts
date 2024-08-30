@@ -191,6 +191,9 @@ export class OwlCalendarComponent<T>
         @Inject(OWL_DATE_TIME_FORMATS)
         private dateTimeFormats: OwlDateTimeFormats
     ) {
+        if( dateTimeAdapter.dateTimeFormats ){
+            this.dateTimeFormats = dateTimeAdapter.dateTimeFormats
+        }
         this.intlChangesSub = this.pickerIntl.changes.subscribe(() => {
             this.cdRef.markForCheck();
         });

@@ -301,9 +301,9 @@ export class OwlDateTimeInlineComponent<T> extends OwlDateTime<T>
         @Optional() protected dateTimeAdapter: DateTimeAdapter<T>,
         @Optional()
         @Inject(OWL_DATE_TIME_FORMATS)
-        protected dateTimeFormats: OwlDateTimeFormats
+        protected _dateTimeFormats: OwlDateTimeFormats
     ) {
-        super(dateTimeAdapter, dateTimeFormats);
+        super(dateTimeAdapter, _dateTimeFormats);
     }
 
     public ngOnInit() {

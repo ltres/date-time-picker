@@ -297,8 +297,12 @@ export class NativeDateTimeAdapter extends DateTimeAdapter<Date> {
                     Math.max(1, Math.min(9999, date.getFullYear()))
                 );
             }
-            if(!displayFormat.timeZone){
+            if(typeof displayFormat === 'object' && !displayFormat.timeZone){
                 displayFormat.timeZone = 'utc'
+            }else if(typeof displayFormat === 'string'){
+                displayFormat = { displayFormat, timeZone: 'utc' };
+            }else if(typeof displayFormat === 'function'){
+                return this.stripDirectionalityCharacters(this._format(displayFormat, date));
             }
             //displayFormat = { ...displayFormat, timeZone: 'Europe/Rome' };
             const dtf = new Intl.DateTimeFormat(this.getLocale(), displayFormat);
@@ -354,8 +358,8 @@ export class NativeDateTimeAdapter extends DateTimeAdapter<Date> {
      * We work around this problem building a new Date object which has its internal UTC
      * representation with the local date and time.
      */
-    private _format(dtf: Intl.DateTimeFormat, date: Date) {
+    private _format(dtf: Intl.DateTimeFormat | ((arg:Date) => string), date: Date) {
         
-        return dtf.format(date);
+        return typeof dtf === 'function' ? dtf(date) : dtf.format(date);
     }
 }

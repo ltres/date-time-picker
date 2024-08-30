@@ -239,6 +239,9 @@ export class OwlYearViewComponent<T>
         @Inject(OWL_DATE_TIME_FORMATS)
         private dateTimeFormats: OwlDateTimeFormats
     ) {
+        if( dateTimeAdapter.dateTimeFormats ){
+            this.dateTimeFormats = dateTimeAdapter.dateTimeFormats
+        }
         this.monthNames = this.dateTimeAdapter.getMonthNames('short');
     }
 

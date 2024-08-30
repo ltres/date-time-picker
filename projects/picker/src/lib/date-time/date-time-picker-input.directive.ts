@@ -483,6 +483,9 @@ export class OwlDateTimeInputDirective<T>
                     `custom implementation.`
             );
         }
+        if( dateTimeAdapter.dateTimeFormats ){
+            this.dateTimeFormats = dateTimeAdapter.dateTimeFormats
+        }
 
         if (!this.dateTimeFormats) {
             throw Error(

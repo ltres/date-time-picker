@@ -363,12 +363,12 @@ export class OwlDateTimeComponent<T> extends OwlDateTime<T>
         @Inject(OWL_DTPICKER_SCROLL_STRATEGY) defaultScrollStrategy: any,
         @Optional()
         @Inject(OWL_DATE_TIME_FORMATS)
-        protected dateTimeFormats: OwlDateTimeFormats,
+        protected _dateTimeFormats: OwlDateTimeFormats,
         @Optional()
         @Inject(DOCUMENT)
         private document: any
     ) {
-        super(dateTimeAdapter, dateTimeFormats);
+        super(dateTimeAdapter, _dateTimeFormats);
         this.defaultScrollStrategy = defaultScrollStrategy;
     }
 

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { datePickerFormat, RECURRENCE_VALUES, Timeframe, TIMEFRAME_VALUES } from './constants';
+import { datePickerFormat, datePickerFormatFuncz, RECURRENCE_VALUES, Timeframe, TIMEFRAME_VALUES } from './constants';
 
 import { DateTimeAdapter, OWL_DATE_TIME_FORMATS, OwlDateTimeModule, OwlNativeDateTimeModule } from '../../projects/picker/src/public_api';
 import { CommonModule } from '@angular/common';
@@ -21,7 +21,7 @@ const ONE_DAY = 24 * 60 * 60 * 1000;
     CommonModule
   ],
   providers: [
-    {provide: OWL_DATE_TIME_FORMATS, useValue: datePickerFormat},
+    //{provide: OWL_DATE_TIME_FORMATS, useValue: datePickerFormatFuncz},
   ]
 })
 export class AppComponent {
@@ -33,6 +33,7 @@ export class AppComponent {
 
   constructor(dateTimeAdapter: DateTimeAdapter<unknown>){
     dateTimeAdapter.setLocale("it-IT");
+    dateTimeAdapter.setDateTimeFormats(datePickerFormatFuncz)
   }
 
   protected selectedDates: [Date, Date] = [
